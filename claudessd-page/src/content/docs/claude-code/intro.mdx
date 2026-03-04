@@ -17,7 +17,18 @@ Claude Code sigue un ciclo de razonamiento-acción conocido como loop agéntico:
 3. **Actuar** — Ejecuta una herramienta (leer archivo, editar, correr tests, etc.).
 4. **Observar** — Recibe el resultado y decide si continuar o detenerse.
 
-Este ciclo se repite hasta completar la tarea o requerir intervención humana.
+
+
+# Claude vs Claude Code
+Vamos a hacer primero la diferenciacion entre lo que es Claude y lo que es Claude Code, al usar claude.
+Algo clave para entender como usar Claude Code es entender que no es un chatbot, este se apoya usando los modelos LLLM de Anthropic, como Claude, pero no es un chatbot, es una herramienta que se ejecuta en tu terminal y tiene acceso a tu sistema de archivos, a tu terminal, a la web, etc. 
+Esto trae una serie de ventajas, pero tambien aspectos a tener en cuenta.
+
+### Diferencias entre Asistente de Codigo y LLMs 
+Un modelo de lenguaje, por su funcionamiento solo puede completar texto, esto hace que su uso sea limitado, ya que no puede interactuar con el entorno, no puede ejecutar codigo, no puede leer archivos, etc.
+Los asistentes de codigos son los intermediarios entre los LLMs y el usuario, estos pueden ejecutar codigo, leer archivos, etc. Esto hace que su uso sea mucho mas poderoso, ya que pueden interactuar con el entorno y no solo completar texto.
+
+
 
 ## Herramientas nativas
 

@@ -1,5 +1,4 @@
 ---
-// Custom landing page — bypasses Starlight layout
 ---
 
 <!DOCTYPE html>
@@ -11,7 +10,7 @@
   <script is:inline src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  <script is:inline id="tailwind-config">
+  <script is:inline>
     tailwind.config = {
       darkMode: "class",
       theme: {
@@ -39,7 +38,6 @@
       background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
       background-size: 24px 24px;
     }
-    /* Spotlight: glow rojo que sigue el cursor sobre el dot-grid */
     .hero-spotlight {
       position: absolute;
       inset: 0;
@@ -51,7 +49,6 @@
     #hero-section:hover .hero-spotlight {
       opacity: 1;
     }
-    /* Tilt 3D en el hero visual */
     #hero-card {
       transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
       will-change: transform;
@@ -64,7 +61,6 @@
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
 <div class="relative flex min-h-screen flex-col">
 
-  <!-- Header -->
   <header class="sticky top-0 z-50 flex h-14 w-full items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-6 lg:px-20">
     <div class="flex items-center gap-6">
       <div class="flex items-center gap-2">
@@ -81,27 +77,20 @@
       </nav>
     </div>
     <div class="flex items-center gap-4">
-      <nav class="hidden lg:flex items-center gap-6 text-sm font-medium">
-      </nav>
       <div class="h-4 w-px bg-slate-200 dark:bg-slate-800 hidden sm:block"></div>
-      <div class="flex items-center gap-2">
-        <button class="flex h-9 w-9 items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-          <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.841 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-        </button>
-      </div>
+      <button class="flex h-9 w-9 items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.841 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+      </button>
     </div>
   </header>
 
   <main class="flex-1">
-
-    <!-- Hero Section -->
     <section id="hero-section" class="dot-grid relative overflow-hidden px-6 py-24 lg:px-20 lg:py-32">
-      <!-- Spotlight overlay -->
       <div class="hero-spotlight"></div>
       <div class="mx-auto max-w-5xl">
         <div class="flex flex-col items-center text-center">
           <div class="mb-6 inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary ring-1 ring-inset ring-primary/20">
-            Innovación
+            Innovación y Tecnología Informática
           </div>
           <h1 class="mb-8 text-5xl font-black leading-[1.1] tracking-tight text-slate-950 dark:text-white sm:text-7xl lg:text-8xl">
             Claude Code +<br />
@@ -116,13 +105,10 @@
             </a>
           </div>
         </div>
-
-    
-        
       </div>
     </section>
+  </main>
 
-  <!-- Footer -->
   <footer class="border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-background-dark px-6 py-12 lg:px-20">
     <div class="mx-auto max-w-6xl flex flex-col md:flex-row justify-between items-center gap-8">
       <div class="flex items-center gap-2">
@@ -142,34 +128,25 @@
 </div>
 
 <script is:inline>
-  // --- Spotlight: actualiza la posición del glow siguiendo el cursor ---
   const heroSection = document.getElementById('hero-section');
   heroSection.addEventListener('mousemove', (e) => {
     const rect = heroSection.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    heroSection.style.setProperty('--mouse-x', x + '%');
-    heroSection.style.setProperty('--mouse-y', y + '%');
+    heroSection.style.setProperty('--mouse-x', ((e.clientX - rect.left) / rect.width) * 100 + '%');
+    heroSection.style.setProperty('--mouse-y', ((e.clientY - rect.top) / rect.height) * 100 + '%');
   });
 
-  // --- Tilt 3D: inclina el hero card según la posición del cursor ---
   const heroCard = document.getElementById('hero-card');
-  const MAX_TILT = 6; // grados máximos de inclinación
-
-  heroCard.addEventListener('mousemove', (e) => {
-    const rect = heroCard.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dx = (e.clientX - cx) / (rect.width / 2);   // -1 a 1
-    const dy = (e.clientY - cy) / (rect.height / 2);  // -1 a 1
-    const rotateY =  dx * MAX_TILT;
-    const rotateX = -dy * MAX_TILT;
-    heroCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`;
-  });
-
-  heroCard.addEventListener('mouseleave', () => {
-    heroCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
-  });
+  if (heroCard) {
+    heroCard.addEventListener('mousemove', (e) => {
+      const rect = heroCard.getBoundingClientRect();
+      const dx = (e.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
+      const dy = (e.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
+      heroCard.style.transform = `perspective(1000px) rotateX(${-dy * 6}deg) rotateY(${dx * 6}deg) scale(1.01)`;
+    });
+    heroCard.addEventListener('mouseleave', () => {
+      heroCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+    });
+  }
 </script>
 </body>
 </html>
