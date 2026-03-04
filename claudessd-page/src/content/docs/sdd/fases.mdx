@@ -1,0 +1,68 @@
+---
+title: Las 4 Fases de SDD
+description: Las cuatro fases del ciclo SDD con plantillas para cada una.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+## El ciclo SDD
+
+SDD organiza el desarrollo en cuatro fases secuenciales. Cada fase produce un artefacto que alimenta la siguiente.
+
+<Steps>
+
+1. **Explorar**
+
+   Entender el contexto antes de proponer soluciones. Claude lee el código existente, identifica patrones, dependencias y restricciones.
+
+   **Plantilla:**
+   ```
+   Explora [área del codebase]. Necesito entender:
+   - La estructura actual de [componente/módulo]
+   - Las dependencias relevantes
+   - Los patrones utilizados
+   NO hagas ningún cambio todavía. Solo reporta lo que encuentres.
+   ```
+
+2. **Planificar**
+
+   Diseñar la solución antes de implementarla. Se usa Plan Mode para obtener aprobación explícita.
+
+   **Plantilla:**
+   ```
+   Basándote en tu exploración, diseña un plan para [objetivo].
+   El plan debe incluir:
+   - Archivos a modificar y por qué
+   - Enfoque técnico elegido y alternativas descartadas
+   - Posibles riesgos o efectos secundarios
+   Espera mi aprobación antes de implementar.
+   ```
+
+3. **Implementar**
+
+   Ejecutar el plan aprobado con cambios precisos y verificables.
+
+   **Plantilla:**
+   ```
+   Implementa el plan aprobado. Para cada cambio:
+   - Haz ediciones quirúrgicas (no reescrituras innecesarias)
+   - Ejecuta los tests después de cada paso significativo
+   - Detente si encuentras algo inesperado y repórtalo
+   ```
+
+4. **Commit**
+
+   Cerrar el ciclo con un registro claro del cambio realizado.
+
+   **Plantilla:**
+   ```
+   Crea un commit con los cambios implementados.
+   El mensaje debe explicar el QUÉ y el POR QUÉ,
+   no solo el CÓMO. Sigue la convención del proyecto.
+   ```
+
+</Steps>
+
+## Por qué las 4 fases importan
+
+Saltarse fases es la causa más común de resultados insatisfactorios con IA. La exploración sin plan lleva a implementaciones que no encajan. La implementación sin exploración introduce regresiones. SDD hace cada fase **explícita y verificable**.

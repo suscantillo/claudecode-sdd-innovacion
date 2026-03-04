@@ -1,0 +1,37 @@
+---
+title: ¿Qué es Claude Code?
+description: Introducción a Claude Code, el loop agéntico y las herramientas nativas disponibles.
+---
+
+## ¿Qué es Claude Code?
+
+Claude Code es la CLI oficial de Anthropic para interactuar con Claude directamente desde la terminal. A diferencia de los chatbots convencionales, Claude Code opera como un **agente autónomo** capaz de leer, escribir y ejecutar código en tu entorno local.
+
+## El loop agéntico
+
+Claude Code sigue un ciclo de razonamiento-acción conocido como loop agéntico:
+![A starry night sky.](../../../assets/agenticloop.svg)
+
+1. **Percibir** — Lee el contexto: archivos, resultados de comandos, mensajes del usuario.
+2. **Razonar** — Planifica la siguiente acción más adecuada.
+3. **Actuar** — Ejecuta una herramienta (leer archivo, editar, correr tests, etc.).
+4. **Observar** — Recibe el resultado y decide si continuar o detenerse.
+
+Este ciclo se repite hasta completar la tarea o requerir intervención humana.
+
+## Herramientas nativas
+
+Claude Code tiene acceso a un conjunto de herramientas integradas:
+
+| Herramienta | Descripción |
+|-------------|-------------|
+| `Read` | Leer archivos del sistema |
+| `Write` | Crear o sobrescribir archivos |
+| `Edit` | Ediciones quirúrgicas con diff exacto |
+| `Bash` | Ejecutar comandos de terminal |
+| `Glob` | Buscar archivos por patrón |
+| `Grep` | Buscar contenido dentro de archivos |
+| `WebFetch` | Obtener contenido de URLs |
+| `WebSearch` | Buscar en la web |
+| `Agent` | Lanzar subagentes especializados |
+| `TodoWrite` | Gestionar lista de tareas |

@@ -1,0 +1,83 @@
+---
+title: "Caso 3: De wireframe a componente shadcn/ui"
+description: Convertir un wireframe en un componente React con shadcn/ui usando Claude Code.
+---
+
+## Contexto
+
+El equipo de diseño entregó wireframes en Figma para un formulario complejo de onboarding con múltiples pasos, validaciones y lógica condicional. El desarrollador necesita convertirlo en código sin perder detalles.
+
+## Flujo de trabajo
+
+### 1. Describir el wireframe con precisión
+
+En lugar de adjuntar la imagen y pedir "haz esto", describir el componente en detalle:
+
+```
+Necesito crear un formulario de onboarding multi-paso con shadcn/ui.
+
+Especificaciones:
+- 3 pasos: Datos personales → Empresa → Preferencias
+- Paso 1: nombre (requerido), email (requerido, validar formato),
+  teléfono (opcional)
+- Paso 2: nombre empresa (requerido), tamaño (select: 1-10, 11-50,
+  51-200, 200+), industria (select con opciones predefinidas)
+- Paso 3: rol (radio: Developer/Designer/Manager/Other),
+  si Other → mostrar campo de texto adicional (condicional)
+- Navegación: Anterior/Siguiente con validación por paso
+- Estado de progreso visual (stepper)
+
+El proyecto ya usa: react-hook-form, zod, shadcn/ui.
+Sigue los patrones existentes en src/components/forms/.
+```
+
+### 2. Explorar primero
+
+```
+Antes de crear el componente, explora src/components/forms/
+para entender los patrones existentes de formularios y validación.
+```
+
+Claude identifica que ya existe un patrón con `FormField`, `FormItem`, `FormLabel` de shadcn y que los schemas Zod se definen en archivos separados `*.schema.ts`.
+
+### 3. Plan del componente
+
+```
+/plan
+
+Diseña la estructura del componente OnboardingForm:
+- Qué archivos crear
+- Cómo dividir los pasos en sub-componentes
+- Dónde definir el schema Zod
+- Cómo manejar el estado del wizard
+```
+
+**Plan aprobado:**
+```
+src/components/onboarding/
+├── OnboardingForm.tsx          # Componente principal con stepper
+├── steps/
+│   ├── PersonalInfoStep.tsx
+│   ├── CompanyStep.tsx
+│   └── PreferencesStep.tsx
+└── onboarding.schema.ts        # Schema Zod completo
+```
+
+### 4. Implementar paso a paso
+
+```
+Implementa el plan. Empieza por el schema Zod,
+luego el componente principal y después cada paso.
+Verifica TypeScript después de cada archivo.
+```
+
+## Resultado
+
+Componente funcional en ~45 minutos, siguiendo exactamente los patrones del proyecto, con validación por paso y lógica condicional correctamente implementada.
+
+## Clave del éxito
+
+La especificación detallada eliminó las ambigüedades. Claude no tuvo que adivinar:
+- Qué librería de formularios usar (react-hook-form + zod)
+- Cómo estructurar los archivos (siguió el patrón explorado)
+- Cómo manejar el campo condicional (especificado explícitamente)

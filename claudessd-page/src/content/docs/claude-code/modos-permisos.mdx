@@ -1,0 +1,71 @@
+---
+title: Modos y Permisos
+description: Plan Mode, checkpoints y modos de operación de Claude Code.
+---
+
+## Modos de operación
+
+Claude Code puede operar en diferentes modos según el nivel de autonomía requerido:
+
+### Modo interactivo (por defecto)
+
+Claude solicita confirmación antes de ejecutar acciones con impacto significativo (borrar archivos, push a repositorios, etc.).
+
+### Modo autónomo
+
+```bash
+claude --dangerously-skip-permissions
+```
+
+:::caution
+Usar solo en entornos controlados como pipelines CI/CD. Claude ejecutará todas las acciones sin pedir confirmación.
+:::
+
+### Plan Mode
+
+El modo de planificación permite que Claude diseñe una estrategia antes de ejecutar cambios. Se activa con `/plan` o usando la herramienta `EnterPlanMode`.
+
+**Cuándo usar Plan Mode:**
+- Tareas que afectan múltiples archivos
+- Cambios arquitectónicos
+- Cuando hay múltiples enfoques válidos
+- Antes de refactorizaciones grandes
+
+En Plan Mode, Claude explora el código, diseña el plan y espera aprobación explícita antes de implementar.
+
+## Permisos por herramienta
+
+El usuario puede aprobar o denegar herramientas individualmente. Las herramientas se agrupan en:
+
+| Categoría | Herramientas | Riesgo |
+|-----------|-------------|--------|
+| Lectura | `Read`, `Glob`, `Grep` | Bajo |
+| Escritura local | `Write`, `Edit` | Medio |
+| Ejecución | `Bash` | Variable |
+| Red | `WebFetch`, `WebSearch` | Bajo |
+| Agentes | `Agent` | Variable |
+
+## Checkpoints
+
+Claude Code puede crear puntos de restauración antes de operaciones destructivas. Los checkpoints permiten revertir cambios si el resultado no es el esperado.
+
+```bash
+# Ver historial de checkpoints en una sesión
+/checkpoints
+
+# Restaurar un checkpoint
+/restore <checkpoint-id>
+```
+
+## Hooks de permisos
+
+Los hooks son comandos de shell que se ejecutan en respuesta a eventos de Claude Code, permitiendo control programático de los permisos:
+
+```json
+// settings.json
+{
+  "hooks": {
+    "PreToolUse": [{ "matcher": "Bash", "hooks": [{ "type": "command", "command": "echo 'Bash ejecutándose'" }] }]
+  }
+}
+```

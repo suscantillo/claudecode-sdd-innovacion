@@ -1,0 +1,43 @@
+---
+title: Por qué SDD mejora el código de IA
+description: Los mecanismos concretos por los que SDD produce mejor código con asistencia de IA.
+---
+
+## El problema de raíz
+
+Los modelos de lenguaje optimizan para **completar el prompt de forma plausible**, no necesariamente correcta. Sin una especificación clara, la IA rellena los vacíos con suposiciones que pueden ser razonables pero incorrectas para tu contexto.
+
+## Mecanismos de mejora
+
+### 1. Elimina la ambigüedad
+
+Una especificación explícita reduce el espacio de soluciones válidas. Claude no tiene que adivinar si prefieres REST o GraphQL, si el proyecto usa tabs o spaces, o si el módulo debe ser síncono o asíncrono.
+
+### 2. Activa el razonamiento multi-paso
+
+Al pedir exploración antes de implementación, SDD fuerza a Claude a construir un modelo mental del código existente antes de modificarlo. Esto reduce significativamente las regresiones.
+
+### 3. Crea puntos de control humanos
+
+Las fases de SDD generan momentos explícitos de aprobación. El desarrollador puede corregir el rumbo antes de que se escriba código incorrecto, no después.
+
+### 4. Mejora la trazabilidad
+
+Cuando cada fase produce un artefacto (reporte de exploración, plan aprobado, commits atómicos), es fácil entender POR QUÉ el código es como es, incluso semanas después.
+
+### 5. Escala con la complejidad
+
+En tareas simples la diferencia es marginal. En tareas complejas (refactorizaciones, integraciones nuevas, corrección de bugs difíciles), SDD puede ser la diferencia entre éxito y horas perdidas.
+
+## Evidencia práctica
+
+Los equipos que adoptan SDD reportan:
+
+- **Menos iteraciones** para llegar a código correcto
+- **Mayor confianza** para delegar tareas complejas a la IA
+- **Onboarding más rápido** porque el código tiene contexto documentado
+- **Menos regresiones** porque los cambios son planificados y revisados
+
+## SDD no es una camisa de fuerza
+
+SDD es una metodología, no un ritual. Para cambios triviales (un typo, un cambio de color), las 4 fases son excesivas. La clave es calibrar el nivel de especificación al nivel de riesgo del cambio.

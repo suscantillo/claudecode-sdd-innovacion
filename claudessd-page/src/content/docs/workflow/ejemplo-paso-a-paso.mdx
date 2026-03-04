@@ -1,0 +1,96 @@
+---
+title: Ejemplo Paso a Paso
+description: Tabla de incidentes resuelta paso a paso con Claude Code y el patrón SDD.
+---
+
+## Escenario
+
+Necesitamos agregar una **tabla de incidentes** a un dashboard existente. La tabla debe mostrar incidentes con filtros por severidad y estado, y permitir exportar a CSV.
+
+---
+
+## Paso 1: Explorar
+
+**Prompt:**
+```
+Explora el directorio src/components/dashboard/ y src/api/.
+Necesito entender:
+- Cómo están construidos los componentes de tabla existentes
+- Cómo se hacen las llamadas a la API
+- Qué librerías de UI se usan
+No hagas ningún cambio todavía.
+```
+
+**Resultado esperado:** Claude identifica que el proyecto usa React Query para data fetching, shadcn/ui para componentes, y que ya existe un componente `DataTable` reutilizable.
+
+---
+
+## Paso 2: Planificar
+
+**Prompt:**
+```
+/plan
+
+Basándote en tu exploración, diseña un plan para agregar
+una tabla de incidentes al dashboard con:
+- Filtros por severidad (low/medium/high/critical) y estado
+- Exportación a CSV
+- Paginación server-side
+
+Espera mi aprobación antes de implementar.
+```
+
+**Resultado esperado:** Plan con lista de archivos a crear/modificar, reutilizando `DataTable` existente y el patrón de React Query del proyecto.
+
+---
+
+## Paso 3: Implementar
+
+Tras aprobar el plan:
+
+**Prompt:**
+```
+Implementa el plan aprobado. Empieza por el endpoint de API,
+luego el hook de React Query, y finalmente el componente.
+Ejecuta los tests después de cada parte.
+```
+
+**Seguimiento durante implementación:**
+
+| Paso | Acción | Verificación |
+|------|--------|-------------|
+| 1 | Crear `GET /api/incidents` | `npm test -- incidents.test` |
+| 2 | Crear `useIncidents` hook | Revisar tipos TypeScript |
+| 3 | Crear `IncidentsTable` component | Render en Storybook/dev |
+| 4 | Agregar filtros | Test de interacción |
+| 5 | Implementar export CSV | Test de descarga |
+| 6 | Integrar en dashboard | Test visual completo |
+
+---
+
+## Paso 4: Commit
+
+**Prompt:**
+```
+Crea un commit con los cambios. Sigue el formato
+Conventional Commits del proyecto.
+```
+
+**Resultado:**
+```
+feat(dashboard): add incidents table with filtering and CSV export
+
+- Server-side pagination via React Query
+- Filter by severity and status
+- CSV export using existing download utility
+- Reuses DataTable component for consistency
+```
+
+---
+
+## Lecciones del ejemplo
+
+1. **La exploración reveló** que `DataTable` ya existía — ahorró 2h de trabajo
+2. **El plan identificó** que el endpoint necesitaba paginación server-side desde el inicio
+3. **Los tests por paso** detectaron un problema de tipos en el hook antes de llegar al componente
+4. **El commit atómico** hace fácil revertir si hay un problema en producción

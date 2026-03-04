@@ -1,0 +1,269 @@
+/* =====================================================================
+   Custom Theme — Claude Code + SDD
+   Overrides Starlight defaults to match TIC Docs reference design
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* ── CSS Variable Overrides ─────────────────────────────────────────── */
+
+:root {
+  --sl-color-accent-low: rgba(244, 55, 26, 0.08);
+  --sl-color-accent: #f4371a;
+  --sl-color-accent-high: #ff6644;
+  --sl-color-text-accent: #f4371a;
+  --sl-font: 'Inter', sans-serif;
+}
+
+:root[data-theme='light'] {
+  --sl-color-bg: #f8f6f5;
+  --sl-color-bg-nav: #ffffff;
+  --sl-color-bg-sidebar: #ffffff;
+  --sl-color-bg-inline-code: #fff1e6;
+  --sl-color-hairline: #e2e8f0;
+  --sl-color-hairline-shade: #cbd5e1;
+  --sl-color-hairline-light: #f1f5f9;
+}
+
+:root[data-theme='dark'] {
+  --sl-color-bg: #221210;
+  --sl-color-bg-nav: #1a0d0b;
+  --sl-color-bg-sidebar: #1a0d0b;
+  --sl-color-bg-inline-code: #2d1510;
+  --sl-color-hairline: rgba(255, 255, 255, 0.08);
+  --sl-color-hairline-shade: rgba(255, 255, 255, 0.12);
+}
+
+/* ── Sidebar: Numbered Groups ───────────────────────────────────────── */
+
+ul.top-level {
+  counter-reset: section-counter;
+}
+
+ul.top-level > li:has(> details) {
+  counter-increment: section-counter;
+}
+
+/* Group label: small + uppercase + numbered prefix */
+ul.top-level > li:has(> details) details > summary .group-label .large::before {
+  content: "0" counter(section-counter) "  ";
+}
+
+.group-label .large {
+  font-size: 0.625rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sl-color-gray-3);
+}
+
+/* Caret icon */
+.sidebar-content .caret {
+  color: var(--sl-color-gray-3);
+  width: 0.875rem !important;
+  height: 0.875rem !important;
+}
+
+/* ── Sidebar: Link States ───────────────────────────────────────────── */
+
+/* Add left-border placeholder to all sidebar links */
+.sidebar-content ul a {
+  border-left: 2px solid transparent;
+  transition: border-left-color 0.15s ease, color 0.15s ease,
+    background-color 0.15s ease;
+  border-radius: 0 !important;
+}
+
+/* Active link: red border + red text + subtle background */
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:hover,
+.sidebar-content a[aria-current='page']:focus {
+  background-color: var(--sl-color-accent-low) !important;
+  color: var(--sl-color-accent) !important;
+  border-left-color: var(--sl-color-accent) !important;
+  font-weight: 600;
+}
+
+/* Hover on inactive links */
+.sidebar-content a:not([aria-current='page']):hover {
+  color: var(--sl-color-accent);
+  border-left-color: var(--sl-color-accent);
+  background-color: transparent;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+
+header.header {
+  background-color: var(--sl-color-bg-nav);
+  border-bottom: 1px solid var(--sl-color-hairline);
+}
+
+/* ── Red Divider: between title panel and content panel ─────────────── */
+
+.content-panel + .content-panel {
+  border-top: none !important;
+}
+
+/* Divider inside .sl-container so queda alineado con el título */
+.content-panel + .content-panel .sl-container::before {
+  content: '';
+  display: block;
+  height: 2px;
+  width: 10rem;
+  background-color: var(--sl-color-accent);
+  margin-bottom: 2rem;
+}
+
+/* ── Content: Headings ──────────────────────────────────────────────── */
+
+/* H1 size and weight (PageTitle is overridden separately) */
+h1[data-page-title] {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--sl-color-white);
+}
+
+/* H2: left red bar */
+.sl-markdown-content h2 {
+  position: relative;
+  padding-left: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.sl-markdown-content h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.2em;
+  bottom: 0.1em;
+  width: 4px;
+  background-color: var(--sl-color-accent);
+  border-radius: 9999px;
+}
+
+/* H3: dotted bottom border */
+.sl-markdown-content h3 {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  border-bottom: 1px dotted var(--sl-color-hairline-shade);
+  padding-bottom: 0.5rem;
+}
+
+/* ── Inline Code: orange style ──────────────────────────────────────── */
+
+.sl-markdown-content :not(pre) > code {
+  background-color: #fff1e6 !important;
+  color: #c2410c !important;
+  border: none !important;
+  padding: 0.125rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+:root[data-theme='dark'] .sl-markdown-content :not(pre) > code {
+  background-color: #2d1a10 !important;
+  color: #fb923c !important;
+}
+
+/* ── Code Blocks ────────────────────────────────────────────────────── */
+
+/* Slightly darker frame background — ExpressiveCode handles the rest */
+.expressive-code .frame {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ── Asides: already left-border style in Starlight — just tune colors ─ */
+
+.starlight-aside {
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.starlight-aside--note {
+  background-color: rgba(59, 130, 246, 0.06) !important;
+}
+
+.starlight-aside--caution {
+  background-color: rgba(249, 115, 22, 0.06) !important;
+}
+
+.starlight-aside--tip {
+  background-color: rgba(34, 197, 94, 0.06) !important;
+}
+
+.starlight-aside--danger {
+  background-color: rgba(239, 68, 68, 0.06) !important;
+}
+
+/* ── Pagination ─────────────────────────────────────────────────────── */
+
+.pagination-links a {
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  transition: border-color 0.15s ease;
+}
+
+.pagination-links a:hover {
+  border-color: var(--sl-color-accent);
+  background-color: var(--sl-color-accent-low);
+}
+
+.pagination-links .link-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+/* ── Right TOC ──────────────────────────────────────────────────────── */
+
+.right-sidebar-panel h2 {
+  font-size: 0.625rem !important;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sl-color-gray-3);
+}
+
+.right-sidebar-panel a {
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.right-sidebar-panel a[aria-current='true'] {
+  color: var(--sl-color-accent) !important;
+  font-weight: 600;
+}
+
+.right-sidebar-panel a:not([aria-current='true']):hover {
+  color: var(--sl-color-accent);
+}
+
+/* ── Page Title (custom component styles) ───────────────────────────── */
+
+.page-section-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background-color: var(--sl-color-accent-low);
+  color: var(--sl-color-accent);
+  border: 1px solid rgba(244, 55, 26, 0.2);
+  margin-bottom: 0.75rem;
+}
+
+.page-title-description {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--sl-color-gray-2);
+  font-weight: 400;
+  margin-top: 0.75rem;
+  max-width: 48ch;
+}

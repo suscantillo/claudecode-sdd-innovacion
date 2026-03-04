@@ -1,0 +1,34 @@
+---
+/**
+ * Custom PageTitle component for Starlight.
+ * Adds a section badge above the H1 and renders the frontmatter description.
+ * Registered in astro.config.mjs under starlight({ components: { PageTitle: ... } }).
+ */
+const PAGE_TITLE_ID = '_top';
+
+const { entry } = Astro.locals.starlightRoute;
+
+// Derive section label from the URL slug (first path segment)
+const slug: string = entry.id ?? '';
+const segment = slug.split('/')[0] ?? '';
+
+const sectionLabels: Record<string, string> = {
+  'claude-code': 'Claude Code',
+  'sdd': 'SDD Guide',
+  'workflow': 'Workflow',
+  'casos-de-uso': 'Casos de Uso',
+  'buenas-practicas': 'Buenas Prácticas',
+};
+
+const badge = sectionLabels[segment];
+---
+
+<div>
+  {badge && (
+    <div class="page-section-badge">{badge}</div>
+  )}
+  <h1 id={PAGE_TITLE_ID} data-page-title>{entry.data.title}</h1>
+  {entry.data.description && (
+    <p class="page-title-description">{entry.data.description}</p>
+  )}
+</div>

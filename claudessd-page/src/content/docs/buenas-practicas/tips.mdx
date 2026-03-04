@@ -1,0 +1,78 @@
+---
+title: Tips y Recomendaciones
+description: Recomendaciones prácticas para sacar el máximo provecho de Claude Code.
+---
+
+## Contexto es inversión, no overhead
+
+El tiempo que inviertes en dar contexto a Claude se recupera con creces en calidad de output. Un prompt de 10 líneas bien escrito puede ahorrar 3 iteraciones de corrección.
+
+**Antes (vago):**
+```
+Agrega autenticación a la app
+```
+
+**Después (específico):**
+```
+Agrega autenticación JWT al endpoint POST /api/login.
+El proyecto usa FastAPI, SQLAlchemy y el modelo User en models/user.py.
+El token debe durar 24h. Sigue el patrón de los otros endpoints en api/routes/.
+```
+
+## Un problema a la vez
+
+Claude Code es más efectivo cuando tiene un objetivo claro y acotado. En lugar de pedir todo en un solo mensaje:
+
+```
+# Menos efectivo
+Arregla los bugs, agrega tests, mejora el rendimiento y actualiza el README
+
+# Más efectivo
+Primero: identifica y arregla el bug en el módulo de pagos
+```
+
+## Usa `TodoWrite` para tareas largas
+
+Para tareas con múltiples pasos, pide a Claude que use la herramienta `TodoWrite`:
+
+```
+Crea una lista de tareas con los pasos necesarios para
+implementar [feature]. Marca cada tarea al completarla.
+```
+
+Esto mantiene el progreso visible y permite retomar si se interrumpe la sesión.
+
+## Verifica antes de aprobar el plan
+
+Durante Plan Mode, no apruebes automáticamente. Verifica:
+
+- ¿Los archivos identificados son los correctos?
+- ¿El enfoque es consistente con el resto del proyecto?
+- ¿Hay casos edge no considerados?
+
+Un minuto de revisión del plan puede evitar 30 minutos de correcciones post-implementación.
+
+## Prefiere ediciones quirúrgicas
+
+Cuando pidas cambios, especifica que sean ediciones precisas:
+
+```
+Modifica SOLO la función calculateTotal en src/utils/pricing.ts
+para agregar soporte para descuentos. No toques el resto del archivo.
+```
+
+## Pide explicaciones cuando algo no está claro
+
+Si Claude hace algo que no entiendes, pregunta antes de continuar:
+
+```
+Antes de continuar, explícame por qué elegiste usar
+useCallback aquí en lugar de useMemo
+```
+
+## Mantén sesiones enfocadas
+
+Las sesiones largas con muchos temas diferentes degradan la calidad. Es mejor:
+- Una sesión por feature o bug
+- Usar `CLAUDE.md` para contexto persistente en lugar de re-explicar en cada sesión
+- `/compact` para comprimir el historial si la sesión se extiende

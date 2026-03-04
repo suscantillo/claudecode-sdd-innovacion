@@ -1,0 +1,70 @@
+---
+title: "Caso 1: CLAUDE.md como cerebro del equipo"
+description: Cómo usar CLAUDE.md para estandarizar el trabajo de IA en un proyecto FastAPI + React.
+---
+
+## Contexto
+
+Un equipo de 4 desarrolladores trabaja en una aplicación con backend FastAPI y frontend React. Cada vez que alguien usa Claude Code, tiene que re-explicar las convenciones del proyecto, la estructura de la API y las restricciones técnicas.
+
+**Problema**: 15-20 minutos perdidos por sesión re-contextualizando a la IA.
+
+## Solución: CLAUDE.md como fuente de verdad
+
+El equipo crea un `CLAUDE.md` en la raíz del proyecto que Claude Code carga automáticamente en cada sesión.
+
+```markdown
+# CLAUDE.md
+
+## Stack
+- Backend: FastAPI + SQLAlchemy + PostgreSQL
+- Frontend: React 18 + React Query + shadcn/ui
+- Auth: JWT con refresh tokens
+
+## Comandos
+cd backend && uvicorn main:app --reload   # API en :8000
+cd frontend && npm run dev                # Frontend en :3000
+pytest backend/tests/                    # Tests de API
+npm test --prefix frontend               # Tests de UI
+
+## Convenciones de API
+- Endpoints en snake_case: /user_profiles, no /userProfiles
+- Respuestas siempre con shape: { data, meta, errors }
+- Paginación: ?page=1&per_page=20 en todos los listados
+
+## Estructura de directorios clave
+backend/
+  api/routes/    # Un archivo por dominio (users.py, incidents.py)
+  models/        # Modelos SQLAlchemy
+  schemas/       # Schemas Pydantic para request/response
+frontend/
+  src/api/       # Hooks de React Query (useUsers, useIncidents)
+  src/components/ui/  # Componentes shadcn (NO modificar directamente)
+
+## Restricciones
+- No usar raw SQL, siempre SQLAlchemy ORM
+- No instalar librerías sin aprobación del equipo
+- Los nuevos endpoints DEBEN tener tests antes del merge
+```
+
+## Resultado
+
+- Claude Code conoce el stack desde el primer mensaje
+- Las convenciones de API se respetan automáticamente
+- Los nuevos integrantes del equipo también se benefician del contexto
+
+## CLAUDE.md por subdirectorio
+
+El equipo agrega un `CLAUDE.md` adicional en `backend/`:
+
+```markdown
+# backend/CLAUDE.md
+
+## Patrón de nuevos endpoints
+1. Crear schema en schemas/<dominio>.py
+2. Agregar ruta en api/routes/<dominio>.py
+3. Registrar router en main.py si es nuevo dominio
+4. Escribir test en tests/test_<dominio>.py
+```
+
+Esto permite instrucciones específicas según el área del código donde trabaje Claude.

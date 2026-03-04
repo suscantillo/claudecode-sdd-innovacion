@@ -1,0 +1,91 @@
+---
+title: Errores Comunes
+description: Anti-patrones del copy-paste y del mal uso de Claude Code que debes evitar.
+---
+
+## Anti-patrón 1: El copy-paste ciego
+
+**El problema**: Copiar código generado sin entenderlo, pegarlo en producción y descubrir el bug 3 días después.
+
+**Señales de alerta:**
+- "Funciona, no sé por qué"
+- Código con nombres de variables genéricos (`data`, `result`, `temp`)
+- Imports de librerías que no reconoces en tu proyecto
+
+**La solución**: Si no entiendes el código generado, pide explicación antes de usarlo:
+```
+Antes de implementar esto, explícame qué hace cada parte
+y por qué elegiste este enfoque.
+```
+
+---
+
+## Anti-patrón 2: El prompt de una línea para tareas complejas
+
+**El problema**: Pedir cosas complejas con contexto mínimo y esperar resultados perfectos.
+
+```
+# Esto no funciona bien
+"Optimiza la base de datos"
+"Arregla los tests"
+"Mejora el rendimiento"
+```
+
+**La solución**: Especifica qué, dónde, cómo y con qué restricciones. Ver [patrón efectivo de trabajo](/workflow/patron-efectivo).
+
+---
+
+## Anti-patrón 3: Aprobar sin revisar
+
+**El problema**: Hacer click en "Aprobar" en cada acción de Claude sin leer qué va a ejecutar.
+
+Esto es especialmente peligroso con:
+- Comandos `Bash` que borran o modifican archivos
+- `git push` a ramas importantes
+- Migraciones de base de datos
+
+**La solución**: Lee siempre el contenido de la acción antes de aprobar. Si algo te parece extraño, pregunta.
+
+---
+
+## Anti-patrón 4: Sesiones maratónicas sin commits
+
+**El problema**: Dejar que Claude haga 50 cambios en una sesión sin hacer commit intermedio. Si algo sale mal, la reversión es dolorosa.
+
+**La solución**: Commit frecuente después de cada feature o corrección verificada:
+```
+# Al final de cada paso funcional:
+Crea un commit con los cambios de [esta parte específica].
+```
+
+---
+
+## Anti-patrón 5: Ignorar las advertencias de Claude
+
+**El problema**: Cuando Claude dice "esto podría tener efectos secundarios en..." y el desarrollador responde "no importa, hazlo igual".
+
+Claude advierte cuando detecta riesgos reales. Ignorar estas advertencias sin entenderlas lleva a bugs difíciles de rastrear.
+
+**La solución**: Antes de ignorar una advertencia, pide que explique el riesgo:
+```
+Explícame el efecto secundario que mencionas. Si lo entiendo
+y decido asumirlo, te lo confirmaré explícitamente.
+```
+
+---
+
+## Anti-patrón 6: CLAUDE.md genérico
+
+**El problema**: Un `CLAUDE.md` lleno de instrucciones obvias que no aportan valor específico al proyecto.
+
+```markdown
+# Mal CLAUDE.md
+- Write clean code
+- Add error handling
+- Follow best practices
+- Test your code
+```
+
+Esto consume ventana de contexto sin dar información útil.
+
+**La solución**: Solo incluir lo que Claude no puede inferir del código mismo — convenciones no estándar, restricciones específicas del negocio, decisiones arquitectónicas no obvias.

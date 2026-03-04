@@ -1,0 +1,54 @@
+---
+title: CLAUDE.md
+description: Estructura, niveles y límites reales del archivo CLAUDE.md.
+---
+
+## ¿Qué es CLAUDE.md?
+
+`CLAUDE.md` es el archivo de instrucciones persistentes para Claude Code. Se carga automáticamente al inicio de cada sesión y define el contexto, convenciones y restricciones del proyecto.
+
+## Niveles de CLAUDE.md
+
+Claude Code soporta múltiples niveles de configuración con orden de precedencia:
+
+| Nivel | Ruta | Alcance |
+|-------|------|---------|
+| Global | `~/.claude/CLAUDE.md` | Todos los proyectos del usuario |
+| Proyecto raíz | `./CLAUDE.md` | Todo el repositorio |
+| Subdirectorio | `./src/CLAUDE.md` | Solo ese directorio y sus hijos |
+
+Los niveles más específicos **extienden** (no reemplazan) a los más generales.
+
+## Estructura recomendada
+
+```markdown
+# CLAUDE.md
+
+## Comandos
+npm run dev   # iniciar servidor
+npm test      # correr tests
+
+## Arquitectura
+Descripción de la estructura del proyecto y decisiones clave.
+
+## Convenciones
+- Nombrado de variables, archivos, etc.
+- Patrones preferidos
+
+## Restricciones
+- Lo que Claude NO debe hacer en este proyecto
+```
+
+## Límites reales
+
+- Las líneas después de la 200 en `MEMORY.md` se truncan en el contexto de auto-memoria
+- Un `CLAUDE.md` muy largo consume ventana de contexto en cada sesión
+- Se recomienda mantenerlo **conciso y accionable** — evitar documentación genérica
+- Los subdirectorios con sus propios `CLAUDE.md` permiten instrucciones específicas por área
+
+## Buenas prácticas
+
+- Incluir comandos de build, test y lint con ejemplos reales
+- Documentar decisiones arquitectónicas que requieren leer múltiples archivos para entender
+- Especificar preferencias del equipo (no prácticas genéricas de desarrollo)
+- Referenciar archivos clave en lugar de duplicar su contenido

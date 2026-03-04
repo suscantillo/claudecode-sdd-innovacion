@@ -1,0 +1,83 @@
+---
+title: "Caso 2: Documentación automática con Plan Mode"
+description: Generar documentación técnica actualizada usando Claude Code y Plan Mode.
+---
+
+## Contexto
+
+Un proyecto de 2 años tiene documentación desactualizada. El README describe una arquitectura que ya no existe. Los nuevos desarrolladores tardan días en entender el sistema real.
+
+**Problema**: La documentación manual no escala — nadie la actualiza porque toma tiempo y es aburrido.
+
+## Solución: Claude Code como documentador
+
+### Fase 1: Auditoría de documentación existente
+
+```
+Lee README.md, docs/ y los archivos de configuración principales.
+Luego explora src/ para entender la arquitectura actual.
+Identifica las discrepancias entre la documentación existente
+y el código real. No hagas cambios todavía.
+```
+
+Claude produce un reporte de discrepancias: módulos que ya no existen documentados, nuevos módulos sin documentar, dependencias incorrectas en el README.
+
+### Fase 2: Planificar la nueva documentación
+
+```
+/plan
+
+Basándote en la auditoría, diseña un plan para:
+1. Actualizar el README con la arquitectura real
+2. Generar documentación para los módulos sin cobertura
+3. Crear un diagrama de dependencias en Mermaid
+
+Espera aprobación antes de escribir nada.
+```
+
+El plan identifica que algunos módulos necesitan ser leídos en profundidad antes de documentarlos. Se aprueba el plan con una corrección: el diagrama Mermaid irá en `docs/architecture.md`, no en el README.
+
+### Fase 3: Implementar
+
+```
+Implementa el plan aprobado. Para cada módulo:
+1. Lee todos los archivos del módulo
+2. Escribe la documentación basándote en el código real
+3. Si algo no está claro, pregunta antes de asumir
+```
+
+### Resultado
+
+```
+docs/
+├── README.md              # Actualizado con arquitectura real
+├── architecture.md        # Diagrama Mermaid + explicación
+├── api-reference.md       # Endpoints documentados desde el código
+└── modules/
+    ├── auth.md
+    ├── payments.md
+    └── notifications.md
+```
+
+## Por qué Plan Mode es clave aquí
+
+Sin Plan Mode, Claude podría empezar a sobreescribir documentación antes de tener el contexto completo. El plan explícito asegura que el equipo valide el enfoque antes de que se genere contenido que luego hay que descartar.
+
+## Automatizar con hooks
+
+```json
+// .claude/settings.json
+{
+  "hooks": {
+    "PostToolUse": [{
+      "matcher": "Write",
+      "hooks": [{
+        "type": "command",
+        "command": "echo 'Archivo modificado: $TOOL_OUTPUT_FILE' >> docs/change-log.txt"
+      }]
+    }]
+  }
+}
+```
+
+Esto crea un log automático de qué documentación fue actualizada en cada sesión.

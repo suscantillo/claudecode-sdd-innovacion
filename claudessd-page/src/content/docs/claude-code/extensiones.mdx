@@ -1,0 +1,81 @@
+---
+title: Skills, Subagents, MCP y Hooks
+description: "Extensiones de Claude Code: Skills, Subagents, MCP servers, Hooks y Plugins."
+---
+
+## Skills (Comandos de usuario)
+
+Los Skills son prompts predefinidos que se invocan con `/nombre-skill`. Se pueden crear en `~/.claude/skills/` o en `.claude/skills/` del proyecto.
+
+```bash
+# Invocar un skill
+/commit
+/review-pr 123
+/deploy staging
+```
+
+Los skills se expanden a prompts completos cuando se ejecutan, permitiendo flujos de trabajo reutilizables y estandarizados.
+
+## Subagents
+
+Los subagentes son instancias de Claude especializadas que se lanzan con la herramienta `Agent`. Permiten:
+
+- **Paralelización**: ejecutar múltiples tareas independientes simultáneamente
+- **Aislamiento de contexto**: proteger la ventana de contexto principal
+- **Especialización**: agentes con herramientas y prompts específicos
+
+```
+Tipos de subagentes disponibles:
+- general-purpose: tareas de investigación y código
+- Explore: exploración rápida de codebases
+- Plan: diseño de estrategias de implementación
+- claude-code-guide: preguntas sobre Claude Code y la API
+```
+
+## MCP (Model Context Protocol)
+
+MCP permite conectar Claude Code con fuentes de datos y herramientas externas mediante servidores estandarizados.
+
+### Configurar un servidor MCP
+
+```json
+// ~/.claude/settings.json o .claude/settings.json
+{
+  "mcpServers": {
+    "mi-servidor": {
+      "command": "npx",
+      "args": ["-y", "@mi-org/mi-servidor-mcp"],
+      "env": { "API_KEY": "..." }
+    }
+  }
+}
+```
+
+### Servidores MCP comunes
+
+- **Context7**: documentación actualizada de librerías
+- **Excalidraw**: diagramas interactivos
+- **Mermaid Chart**: diagramas de flujo y arquitectura
+- **GitHub**: integración con repositorios y PRs
+
+## Hooks
+
+Los hooks son scripts de shell que se ejecutan automáticamente en respuesta a eventos del ciclo de vida de Claude Code:
+
+| Evento | Descripción |
+|--------|-------------|
+| `PreToolUse` | Antes de ejecutar una herramienta |
+| `PostToolUse` | Después de ejecutar una herramienta |
+| `Notification` | Cuando Claude envía una notificación |
+| `Stop` | Cuando Claude termina de responder |
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [{
+      "matcher": "Write",
+      "hooks": [{ "type": "command", "command": "npm run lint -- $TOOL_OUTPUT_FILE" }]
+    }]
+  }
+}
+```

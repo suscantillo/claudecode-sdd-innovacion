@@ -1,0 +1,74 @@
+---
+title: Patrón Efectivo de Trabajo
+description: El ciclo Explorar → Planificar → Implementar → Commit aplicado con Claude Code.
+---
+
+## El patrón fundamental
+
+Todo trabajo efectivo con Claude Code sigue este ciclo de cuatro pasos. La clave es **no saltarse ninguno**, especialmente en tareas con impacto significativo.
+
+```
+Explorar → Planificar → Implementar → Commit
+```
+
+## Explorar
+
+**Objetivo**: construir contexto antes de proponer soluciones.
+
+```
+Lee [archivos relevantes] y dime:
+1. Cómo está estructurado actualmente [módulo/función]
+2. Qué dependencias existen
+3. Qué convenciones sigue el código existente
+
+No propongas cambios todavía.
+```
+
+**Señales de una buena exploración:**
+- Claude cita código específico, no generalidades
+- Identifica dependencias no obvias
+- Menciona posibles puntos de conflicto
+
+## Planificar
+
+**Objetivo**: obtener un plan aprobado antes de escribir código.
+
+```
+/plan
+
+Diseña un plan para [objetivo] considerando lo que exploramos.
+Incluye qué archivos cambiarás y por qué.
+```
+
+**Lo que debes revisar en el plan:**
+- ¿Los archivos identificados son los correctos?
+- ¿El enfoque tiene sentido para el contexto del proyecto?
+- ¿Hay efectos secundarios no considerados?
+
+:::tip
+Usa Plan Mode (`/plan`) para que Claude explícitamente espere tu aprobación antes de implementar.
+:::
+
+## Implementar
+
+**Objetivo**: ejecutar el plan con cambios precisos y verificables.
+
+Principios durante la implementación:
+
+- **Cambios atómicos**: cada modificación debe ser independientemente entendible
+- **Tests frecuentes**: ejecutar tests después de cada paso significativo
+- **Parar ante sorpresas**: si algo inesperado aparece, reportar antes de continuar
+
+## Commit
+
+**Objetivo**: cerrar el ciclo con un registro claro.
+
+```
+Crea un commit con los cambios. El mensaje debe seguir
+el formato del proyecto y explicar el propósito del cambio,
+no solo describir qué archivos se modificaron.
+```
+
+## Cuándo acortar el ciclo
+
+Para cambios triviales (fix de typo, ajuste de estilo, renombrar variable), puedes ir directo a implementación. El criterio es: **¿si esto sale mal, cuánto tiempo toma revertirlo?** Si la respuesta es "segundos", no necesitas exploración ni plan formal.

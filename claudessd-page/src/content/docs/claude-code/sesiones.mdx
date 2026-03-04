@@ -1,0 +1,56 @@
+---
+title: Sesiones, Worktrees y Contexto
+description: Cómo funcionan las sesiones de Claude Code, los git worktrees y la ventana de contexto.
+---
+
+## Sesiones
+
+Una sesión de Claude Code es una conversación continua con memoria del historial. Se inicia al ejecutar `claude` y termina al cerrar la terminal o con `/exit`.
+
+### Reanudar sesiones
+
+```bash
+claude --continue          # Continúa la última sesión
+claude --resume <id>       # Reanuda una sesión específica por ID
+```
+
+### Listar sesiones anteriores
+
+```bash
+claude --list-sessions
+```
+
+## Ventana de contexto
+
+La ventana de contexto es la cantidad de información que Claude puede "ver" al mismo tiempo. Cuando se acerca al límite:
+
+- El sistema comprime automáticamente mensajes anteriores
+- Se conserva el contexto más relevante
+- No se interrumpe la conversación
+
+:::tip
+Usa archivos `CLAUDE.md` para proveer contexto persistente sin consumir la ventana de contexto en cada mensaje.
+:::
+
+## Git Worktrees
+
+Los worktrees permiten a Claude Code trabajar en una copia aislada del repositorio, ideal para tareas largas o experimentales:
+
+```bash
+# Claude puede crear un worktree automáticamente al usar el Agent tool con isolation: "worktree"
+# O puedes crearlo manualmente:
+git worktree add .claude/worktrees/mi-feature -b mi-feature
+```
+
+### Ventajas de los worktrees
+
+- **Aislamiento**: los cambios no afectan tu rama de trabajo
+- **Paralelismo**: múltiples tareas en simultáneo sin conflictos
+- **Reversibilidad**: descartar cambios es tan simple como eliminar el worktree
+
+### Limpiar worktrees
+
+```bash
+git worktree remove .claude/worktrees/mi-feature
+git worktree prune
+```

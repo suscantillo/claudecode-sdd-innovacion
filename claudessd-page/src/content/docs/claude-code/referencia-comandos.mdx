@@ -1,0 +1,61 @@
+---
+title: Referencia de Comandos
+description: Cheat sheet completo de comandos y flags de Claude Code.
+---
+
+## Comandos de inicio
+
+```bash
+claude                          # Iniciar sesión interactiva
+claude "mensaje inicial"        # Iniciar con un prompt
+claude --continue               # Continuar la última sesión
+claude --resume <session-id>    # Reanudar sesión específica
+claude --model claude-opus-4-6  # Usar un modelo específico
+claude --dangerously-skip-permissions  # Modo sin confirmaciones
+```
+
+## Slash commands (dentro de una sesión)
+
+| Comando | Descripción |
+|---------|-------------|
+| `/help` | Mostrar ayuda |
+| `/clear` | Limpiar el historial de la sesión |
+| `/exit` | Terminar la sesión |
+| `/plan` | Entrar en Plan Mode |
+| `/fast` | Activar/desactivar Fast Mode |
+| `/compact` | Compactar el historial de la sesión |
+| `/checkpoints` | Ver checkpoints de la sesión |
+| `/restore <id>` | Restaurar un checkpoint |
+| `/tasks` | Ver tareas en segundo plano |
+| `/memory` | Ver y editar la memoria del proyecto |
+| `/<skill>` | Invocar un skill definido por el usuario |
+
+## Flags de la CLI
+
+| Flag | Descripción |
+|------|-------------|
+| `--version` | Mostrar versión instalada |
+| `--model <id>` | Especificar modelo de Claude |
+| `--continue` | Continuar última sesión |
+| `--resume <id>` | Reanudar sesión por ID |
+| `--list-sessions` | Listar sesiones anteriores |
+| `--dangerously-skip-permissions` | Omitir confirmaciones de permisos |
+| `--no-mcp` | Deshabilitar servidores MCP |
+| `--debug` | Activar logs de depuración |
+
+## Modelos disponibles
+
+| Modelo | ID |
+|--------|----|
+| Claude Opus 4.6 | `claude-opus-4-6` |
+| Claude Sonnet 4.6 | `claude-sonnet-4-6` |
+| Claude Haiku 4.5 | `claude-haiku-4-5-20251001` |
+
+## Atajos de teclado
+
+| Atajo | Acción |
+|-------|--------|
+| `Ctrl+C` | Interrumpir la respuesta actual |
+| `Ctrl+D` | Salir de la sesión |
+| `↑ / ↓` | Navegar historial de comandos |
+| `Tab` | Autocompletar slash commands |

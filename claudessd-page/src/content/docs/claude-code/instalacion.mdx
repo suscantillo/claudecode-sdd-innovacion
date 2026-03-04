@@ -1,0 +1,50 @@
+---
+title: Instalación
+description: Cómo instalar Claude Code en diferentes plataformas.
+---
+
+## Requisitos previos
+
+- Node.js 18 o superior
+- Una cuenta activa en [claude.ai](https://claude.ai) con acceso a Claude Code
+- Una API key de Anthropic (opcional para uso avanzado)
+
+## Instalación global
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+## Verificar instalación
+
+```bash
+claude --version
+```
+
+## Autenticación
+
+Al ejecutar `claude` por primera vez, se abrirá el navegador para autenticarte con tu cuenta de Anthropic:
+
+```bash
+claude
+```
+
+## Instalación en macOS (con Homebrew)
+
+```bash
+brew install claude-code
+```
+
+## Configuración inicial
+
+Claude Code busca configuración en los siguientes lugares, en orden de precedencia:
+
+1. `CLAUDE.md` en el directorio del proyecto
+2. `~/.claude/CLAUDE.md` (configuración global del usuario)
+3. Variables de entorno
+
+## Actualizar Claude Code
+
+```bash
+npm update -g @anthropic-ai/claude-code
+```
