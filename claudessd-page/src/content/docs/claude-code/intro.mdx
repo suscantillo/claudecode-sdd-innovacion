@@ -19,15 +19,18 @@ Claude Code sigue un ciclo de razonamiento-acción conocido como loop agéntico:
 
 
 
-# Claude vs Claude Code
-Vamos a hacer primero la diferenciacion entre lo que es Claude y lo que es Claude Code, al usar claude.
-Algo clave para entender como usar Claude Code es entender que no es un chatbot, este se apoya usando los modelos LLLM de Anthropic, como Claude, pero no es un chatbot, es una herramienta que se ejecuta en tu terminal y tiene acceso a tu sistema de archivos, a tu terminal, a la web, etc. 
-Esto trae una serie de ventajas, pero tambien aspectos a tener en cuenta.
+## Claude vs Claude Code
 
-### Diferencias entre Asistente de Codigo y LLMs 
-Un modelo de lenguaje, por su funcionamiento solo puede completar texto, esto hace que su uso sea limitado, ya que no puede interactuar con el entorno, no puede ejecutar codigo, no puede leer archivos, etc.
-Los asistentes de codigos son los intermediarios entre los LLMs y el usuario, estos pueden ejecutar codigo, leer archivos, etc. Esto hace que su uso sea mucho mas poderoso, ya que pueden interactuar con el entorno y no solo completar texto.
+Para entender Claude Code, es importante diferenciar entre Claude —el modelo de lenguaje— y Claude Code —la herramienta que lo orquesta.
 
+Claude Code no es un chatbot. Si bien se apoya en los modelos LLM de Anthropic, su naturaleza es distinta: es una herramienta que se ejecuta en tu terminal y tiene acceso a tu sistema de archivos, a comandos del sistema, a la web, entre otros recursos. Esto abre una serie de posibilidades, pero también implica aspectos importantes a tener en cuenta.
+
+### Diferencias entre asistente de código y LLMs
+
+Un modelo de lenguaje, por su funcionamiento, solo puede completar texto. Esto limita su utilidad, ya que no puede interactuar con el entorno, ejecutar código ni leer archivos directamente.
+
+Los asistentes de código actúan como intermediarios entre los LLMs y el usuario. Al poder ejecutar código, leer archivos y acceder al entorno, su capacidad de acción es mucho más amplia y poderosa.
+![A starry night sky.](../../../assets/agentvsmodel.png)
 
 
 ## Herramientas nativas
