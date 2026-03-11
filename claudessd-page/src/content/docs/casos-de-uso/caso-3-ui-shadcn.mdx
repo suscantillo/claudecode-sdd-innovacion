@@ -7,6 +7,8 @@ description: Convertir un wireframe en un componente React con shadcn/ui usando 
 
 El equipo de diseño entregó wireframes en Figma para un formulario complejo de onboarding con múltiples pasos, validaciones y lógica condicional. El desarrollador necesita convertirlo en código sin perder detalles.
 
+Flujo completo: wireframe → spec → design.md → generación con Claude Code.
+
 ## Flujo de trabajo
 
 ### 1. Describir el wireframe con precisión
@@ -75,9 +77,51 @@ Verifica TypeScript después de cada archivo.
 
 Componente funcional en ~45 minutos, siguiendo exactamente los patrones del proyecto, con validación por paso y lógica condicional correctamente implementada.
 
+## Ejemplo adicional: UserProfileCard con spec y design.md
+
+Para componentes con estados visuales complejos, la guía recomienda un `design.md` junto al `spec.md`:
+
+**spec.md:**
+```markdown
+## Props
+interface UserProfileCardProps {
+  user: {
+    name: string
+    email: string
+    role: string
+    department: string
+    avatarUrl?: string
+    isOnline: boolean
+  } | null   // null = estado loading
+}
+
+## Criterios de aceptación
+- [ ] Muestra: avatar, nombre, email, rol, departamento
+- [ ] Indicador online/offline sobre el avatar (verde / gris)
+- [ ] Sin foto: iniciales con color determinístico (hash del nombre, no random)
+- [ ] Estado loading: skeleton con animación pulse
+- [ ] "Ver perfil" → navega a /perfil
+- [ ] "Cerrar sesión" → llama a signOut() del contexto de auth
+
+## Design tokens
+- Avatar: 48x48px, border-radius full
+- Indicador: 10x10px, verde = online-500, gris = neutral-400
+- Card: bg-card, border, rounded-lg, p-4
+```
+
+**Prompt de generación:**
+```
+Lee spec.md y design.md en docs/specs/user-profile-card/.
+Revisa cómo usamos shadcn/ui en otros componentes (especialmente
+los que tienen Skeleton).
+Implementa UserProfileCard en src/components/sidebar/user-profile-card.tsx
+con sus tests. Sigue exactamente el spec.
+```
+
 ## Clave del éxito
 
 La especificación detallada eliminó las ambigüedades. Claude no tuvo que adivinar:
 - Qué librería de formularios usar (react-hook-form + zod)
 - Cómo estructurar los archivos (siguió el patrón explorado)
 - Cómo manejar el campo condicional (especificado explícitamente)
+- Qué design tokens usar (definidos en el spec)

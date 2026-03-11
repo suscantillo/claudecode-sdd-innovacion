@@ -6,11 +6,15 @@ description: Cheat sheet completo de comandos y flags de Claude Code.
 ## Comandos de inicio
 
 ```bash
-claude                          # Iniciar sesión interactiva
-claude "mensaje inicial"        # Iniciar con un prompt
-claude --continue               # Continuar la última sesión
-claude --resume <session-id>    # Reanudar sesión específica
-claude --model claude-opus-4-6  # Usar un modelo específico
+claude                               # Iniciar sesión interactiva
+claude "mensaje inicial"             # Iniciar con un prompt
+claude --continue                    # Continuar la última sesión
+claude --resume <session-id>         # Reanudar sesión específica por ID
+claude --resume nombre-sesion        # Reanudar sesión por nombre
+claude --continue --fork-session     # Bifurcar la sesión actual
+claude --model claude-opus-4-6       # Usar un modelo específico
+claude --permission-mode plan        # Iniciar directamente en Plan Mode
+claude --worktree nombre             # Crear worktree aislado
 claude --dangerously-skip-permissions  # Modo sin confirmaciones
 ```
 
@@ -24,10 +28,18 @@ claude --dangerously-skip-permissions  # Modo sin confirmaciones
 | `/plan` | Entrar en Plan Mode |
 | `/fast` | Activar/desactivar Fast Mode |
 | `/compact` | Compactar el historial de la sesión |
+| `/compact focus on X` | Compactar preservando un tema específico |
+| `/context` | Ver qué consume espacio en el contexto |
+| `/rename nombre` | Nombrar la sesión actual |
+| `/resume` | Abrir selector de sesiones anteriores |
 | `/checkpoints` | Ver checkpoints de la sesión |
-| `/restore <id>` | Restaurar un checkpoint |
+| `/rewind` | Restaurar desde un checkpoint (también `Esc × 2`) |
+| `/mcp` | Ver servidores MCP conectados y su costo en tokens |
 | `/tasks` | Ver tareas en segundo plano |
 | `/memory` | Ver y editar la memoria del proyecto |
+| `/doctor` | Diagnóstico del entorno |
+| `/init` | Generar CLAUDE.md base para el proyecto actual |
+| `/agents` | Ver subagentes disponibles |
 | `/<skill>` | Invocar un skill definido por el usuario |
 
 ## Flags de la CLI
@@ -37,11 +49,21 @@ claude --dangerously-skip-permissions  # Modo sin confirmaciones
 | `--version` | Mostrar versión instalada |
 | `--model <id>` | Especificar modelo de Claude |
 | `--continue` | Continuar última sesión |
-| `--resume <id>` | Reanudar sesión por ID |
+| `--resume <id>` | Reanudar sesión por ID o nombre |
 | `--list-sessions` | Listar sesiones anteriores |
+| `--permission-mode plan` | Iniciar en Plan Mode |
+| `--worktree <nombre>` | Crear sesión en worktree aislado |
 | `--dangerously-skip-permissions` | Omitir confirmaciones de permisos |
 | `--no-mcp` | Deshabilitar servidores MCP |
 | `--debug` | Activar logs de depuración |
+
+## Uso headless (scripts y CI)
+
+```bash
+claude -p "tu prompt"                           # Respuesta directa sin sesión interactiva
+claude -p "prompt" --output-format json         # Output en JSON
+cat error.log | claude -p "explica este error"  # Piping de datos
+```
 
 ## Modelos disponibles
 
@@ -57,5 +79,16 @@ claude --dangerously-skip-permissions  # Modo sin confirmaciones
 |-------|--------|
 | `Ctrl+C` | Interrumpir la respuesta actual |
 | `Ctrl+D` | Salir de la sesión |
+| `Ctrl+G` | Editar el plan en Plan Mode |
+| `Esc × 2` | Abrir menú de checkpoints (`/rewind`) |
 | `↑ / ↓` | Navegar historial de comandos |
 | `Tab` | Autocompletar slash commands |
+
+## Cheat sheet por categoría
+
+| Diagnóstico | Sesión | Contexto | Git |
+|-------------|--------|----------|-----|
+| `/doctor` | `/resume` | `/context` | `/commit` |
+| `/init` | `/rename` | `/compact` | |
+| `/mcp` | `/clear` | `/rewind` | |
+| `/agents` | | | |

@@ -37,3 +37,22 @@ SDD convierte a la IA en un **ejecutor de alta precisión** de decisiones humana
 4. Delega la implementación con contexto completo
 
 El resultado es código que el equipo puede mantener, entender y extender.
+
+## Vibe coding vs SDD en la práctica
+
+```
+Vibe coding:
+"Oye Claude, crea un componente de login con email y contraseña"
+→ Algo que funciona, pero sin validación específica, sin estados de error,
+  sin accesibilidad, sin seguir tu design system. Toca corregir iterando.
+
+SDD:
+1. spec.md define: campos, validaciones, estados (loading/error/success),
+   accesibilidad (ARIA), integración con el sistema de auth existente
+2. Claude implementa guiado por esa spec
+→ Primer intento mucho más cercano a lo que necesitas
+```
+
+> "Vibe coding es útil para prototipos y exploración. SDD es para producción, sistemas enterprise y trabajo en equipo."
+
+Sin spec, el modelo tiene que adivinar tu design system, tus restricciones de accesibilidad, qué hooks ya existen. Cada sesión empieza de cero y cada corrección añade deuda de contexto. Con spec, el modelo tiene un contrato explícito que puede verificar.

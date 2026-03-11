@@ -6,10 +6,33 @@ description: Cómo instalar Claude Code en diferentes plataformas.
 ## Requisitos previos
 
 - Node.js 18 o superior
-- Una cuenta activa en [claude.ai](https://claude.ai) con acceso a Claude Code
-- Una API key de Anthropic (opcional para uso avanzado)
+- Una cuenta activa en [claude.ai](https://claude.ai) con plan Pro o Max, o una API key de Anthropic
 
-## Instalación global
+## Instalación
+
+### macOS / Linux / WSL
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+### Windows (PowerShell)
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+### Homebrew (macOS)
+
+```bash
+brew install --cask claude-code
+```
+
+:::caution
+Homebrew no actualiza Claude Code automáticamente. Ejecuta `brew upgrade claude-code` periódicamente.
+:::
+
+### npm (alternativa global)
 
 ```bash
 npm install -g @anthropic-ai/claude-code
@@ -23,28 +46,27 @@ claude --version
 
 ## Autenticación
 
-Al ejecutar `claude` por primera vez, se abrirá el navegador para autenticarte con tu cuenta de Anthropic:
+Al ejecutar `claude` por primera vez en un proyecto, se abrirá el navegador para autenticarte con tu cuenta de Anthropic:
 
 ```bash
-claude
+cd tu-proyecto
+claude   # Abre autenticación en el navegador la primera vez
 ```
-
-## Instalación en macOS (con Homebrew)
-
-```bash
-brew install claude-code
-```
-
-## Configuración inicial
-
-Claude Code busca configuración en los siguientes lugares, en orden de precedencia:
-
-1. `CLAUDE.md` en el directorio del proyecto
-2. `~/.claude/CLAUDE.md` (configuración global del usuario)
-3. Variables de entorno
 
 ## Actualizar Claude Code
 
 ```bash
 npm update -g @anthropic-ai/claude-code
 ```
+
+## Configuración inicial
+
+Claude Code busca configuración en los siguientes lugares, en orden de precedencia:
+
+| Nivel | Ruta | Alcance |
+|-------|------|---------|
+| Proyecto | `./CLAUDE.md` | Solo ese repositorio |
+| Personal (no versionado) | `./CLAUDE.local.md` | Proyecto, en `.gitignore` |
+| Global | `~/.claude/CLAUDE.md` | Todos los proyectos del usuario |
+
+Ver [CLAUDE.md](/claude-code/claude-md) para más detalles sobre la configuración del proyecto.

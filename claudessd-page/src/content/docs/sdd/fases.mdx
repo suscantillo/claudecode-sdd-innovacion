@@ -63,6 +63,41 @@ SDD organiza el desarrollo en cuatro fases secuenciales. Cada fase produce un ar
 
 </Steps>
 
+## Ejemplo: spec.md para un componente real
+
+La Fase 1 (Spec) produce un archivo como este:
+
+```markdown
+# Spec: Componente LoginForm
+
+## Contexto
+Formulario de inicio de sesión para el portal interno TIC.
+Reemplaza el formulario actual en /app/login/page.tsx.
+
+## Criterios de aceptación
+- [ ] Campos: email (validación RFC 5322) y contraseña (mínimo 8 caracteres)
+- [ ] Estado de carga visible al hacer submit
+- [ ] Mensaje de error específico si las credenciales son incorrectas
+- [ ] Mensaje de error genérico si hay falla de red
+- [ ] Accesible: etiquetas ARIA, navegación por teclado, foco visible
+- [ ] Responsive: funciona en móvil (320px) y escritorio
+
+## Restricciones técnicas
+- Usa componentes de shadcn/ui (Input, Button, Form)
+- Integra con el hook useAuth existente en src/hooks/auth.ts
+- No crear nuevas dependencias npm
+
+## Lo que NO incluye este spec
+- Registro de usuarios / recuperación de contraseña (sprint futuro)
+
+## Definición de "terminado"
+- Tests unitarios con >80% cobertura
+- Pasa npm run lint sin errores
+- Revisión de PR aprobada
+```
+
+**El spec es el contrato, no el prompt.** El spec persiste en el repositorio, vive con el código y puede ser revisado en un PR. El prompt es efímero.
+
 ## Por qué las 4 fases importan
 
 Saltarse fases es la causa más común de resultados insatisfactorios con IA. La exploración sin plan lleva a implementaciones que no encajan. La implementación sin exploración introduce regresiones. SDD hace cada fase **explícita y verificable**.

@@ -89,3 +89,45 @@ y decido asumirlo, te lo confirmaré explícitamente.
 Esto consume ventana de contexto sin dar información útil.
 
 **La solución**: Solo incluir lo que Claude no puede inferir del código mismo — convenciones no estándar, restricciones específicas del negocio, decisiones arquitectónicas no obvias.
+
+---
+
+## Anti-patrón 7: El prompt-párrafo sin spec
+
+**El problema**: Pedir sistemas complejos en un solo mensaje sin documentar los requisitos:
+
+```
+"Crea un sistema de autenticación completo con login, registro,
+recuperación de contraseña, OAuth con Google, manejo de sesiones..."
+```
+
+El modelo produce algo, pero sin saber tu stack ni tus constraints. El resultado requiere más tiempo de corrección que hacerlo desde cero.
+
+**La solución**: Divide en fases con spec por cada feature. Empieza por el login básico.
+
+---
+
+## Anti-patrón 8: Ignorar que el CLAUDE.md puede ser sobreescrito
+
+**El problema**: Asumir que el `CLAUDE.md` bloquea todas las instrucciones contrarias. Como demostró el [Caso 1](/casos-de-uso/caso-1-claude-md), Claude acepta instrucciones explícitas del usuario aunque contradigan el `CLAUDE.md`. Si le dices "no hagas X", lo omite — aunque X esté en las reglas.
+
+**La solución**: Usa el `CLAUDE.md` como criterio de auditoría después de implementar:
+```
+"Revisa el CLAUDE.md. ¿Cumpliste todas las reglas en este endpoint?"
+```
+
+---
+
+## Anti-patrón 9: No usar Plan Mode para refactors grandes
+
+**El problema**: Lanzar un prompt de refactor grande en modo default puede resultar en cambios en 20 archivos difíciles de revertir mentalmente, aunque `/rewind` te salve técnicamente.
+
+**La solución**: Usa `claude --permission-mode plan` para cualquier tarea que toque más de 5 archivos o código que no conoces bien.
+
+---
+
+## Anti-patrón 10: Demasiados servidores MCP conectados
+
+**El problema**: Los servidores MCP cargan todas sus definiciones al inicio de cada sesión y consumen tokens de contexto. Tener 5 servidores conectados cuando solo usas uno es contexto desperdiciado.
+
+**La solución**: Conecta solo los que estés usando activamente. Usa `/mcp` para ver el costo de cada servidor.

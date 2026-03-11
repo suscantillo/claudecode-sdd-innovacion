@@ -3,38 +3,104 @@ title: Skills, Subagents, MCP y Hooks
 description: "Extensiones de Claude Code: Skills, Subagents, MCP servers, Hooks y Plugins."
 ---
 
+## Visión general
+
+Más allá de las herramientas nativas, Claude Code tiene una capa de extensión:
+
+| Extensión | Qué hace | Cuándo usar |
+|-----------|----------|-------------|
+| **CLAUDE.md** | Contexto persistente por sesión | Convenciones, reglas "siempre hacer X" |
+| **Skills** | Instrucciones y workflows reutilizables | Tareas repetibles, `/comando` |
+| **Subagents** | Workers con contexto aislado | Tareas que leen muchos archivos, trabajo paralelo |
+| **MCP** | Conexión a servicios externos | Bases de datos, Slack, Figma, sistemas propios |
+| **Hooks** | Scripts determinísticos en eventos | Linting automático, notificaciones, CI/CD |
+
 ## Skills (Comandos de usuario)
 
-Los Skills son prompts predefinidos que se invocan con `/nombre-skill`. Se pueden crear en `~/.claude/skills/` o en `.claude/skills/` del proyecto.
+Los Skills son archivos markdown con conocimiento, instrucciones o workflows. Se invocan con un slash command o Claude los carga automáticamente cuando detecta que son relevantes.
 
-```bash
-# Invocar un skill
-/commit
-/review-pr 123
-/deploy staging
+```
+.claude/
+  skills/
+    api-conventions/
+      SKILL.md       → disponible como /api-conventions
+    fix-issue/
+      SKILL.md       → disponible como /fix-issue
 ```
 
-Los skills se expanden a prompts completos cuando se ejecutan, permitiendo flujos de trabajo reutilizables y estandarizados.
+**Estructura de un skill:**
+
+```markdown
+---
+name: fix-issue
+description: Arregla un issue de GitHub dado su número
+disable-model-invocation: true
+---
+
+Analiza y corrige el issue de GitHub: $ARGUMENTS.
+1. Usar `gh issue view` para ver los detalles
+2. Buscar archivos relevantes en la codebase
+3. Implementar los cambios necesarios
+4. Escribir y correr tests
+5. Crear commit descriptivo y abrir PR
+```
+
+```bash
+/fix-issue 1234   # Invocar el skill en una sesión
+```
+
+:::tip
+`disable-model-invocation: true` hace que el skill sea invisible para Claude hasta que el usuario lo invoque explícitamente. Útil para workflows con efectos secundarios.
+:::
+
+### CLAUDE.md vs Skills
+
+| | CLAUDE.md | Skill |
+|---|-----------|-------|
+| Cuándo carga | Siempre, al inicio | Bajo demanda |
+| Puede disparar workflows | No | Sí, con `/<name>` |
+| Mejor para | Reglas "siempre" | Referencia ocasional, tareas repetibles |
 
 ## Subagents
 
-Los subagentes son instancias de Claude especializadas que se lanzan con la herramienta `Agent`. Permiten:
-
-- **Paralelización**: ejecutar múltiples tareas independientes simultáneamente
-- **Aislamiento de contexto**: proteger la ventana de contexto principal
-- **Especialización**: agentes con herramientas y prompts específicos
+Workers que corren en su propio contexto, completamente separado del contexto principal. Hacen el trabajo y retornan un resumen. **Lo que lean y ejecuten no consume el contexto de la sesión principal.**
 
 ```
-Tipos de subagentes disponibles:
-- general-purpose: tareas de investigación y código
-- Explore: exploración rápida de codebases
-- Plan: diseño de estrategias de implementación
-- claude-code-guide: preguntas sobre Claude Code y la API
+> Usa subagents para investigar cómo funciona nuestro sistema de autenticación
+> y si tenemos alguna utilidad OAuth que pueda reutilizar.
+```
+
+**Cuándo usarlos:**
+- Investigación que requiere leer muchos archivos
+- Tareas paralelas independientes
+- Workers especializados (security review, análisis de rendimiento)
+- La sesión principal tiene el contexto lleno
+
+### Subagent personalizado
+
+```markdown
+<!-- .claude/agents/security-reviewer.md -->
+---
+name: security-reviewer
+description: Revisa código en busca de vulnerabilidades de seguridad
+tools: Read, Grep, Glob, Bash
+model: opus
+---
+Eres un senior security engineer. Revisa el código buscando:
+- Vulnerabilidades de inyección (SQL, XSS, command injection)
+- Fallas de autenticación y autorización
+- Secrets o credenciales en el código
+Provee referencias de línea específicas y sugerencias de fix.
 ```
 
 ## MCP (Model Context Protocol)
 
-MCP permite conectar Claude Code con fuentes de datos y herramientas externas mediante servidores estandarizados.
+Protocolo abierto para conectar Claude Code a servicios externos. Sin MCP, Claude no puede consultar tu base de datos, postear a Slack, o interactuar con APIs propias.
+
+```bash
+claude mcp add   # Conectar un servidor MCP (interfaz interactiva)
+/mcp             # Ver servidores conectados y su costo en tokens
+```
 
 ### Configurar un servidor MCP
 
@@ -58,20 +124,36 @@ MCP permite conectar Claude Code con fuentes de datos y herramientas externas me
 - **Mermaid Chart**: diagramas de flujo y arquitectura
 - **GitHub**: integración con repositorios y PRs
 
+### El patrón más potente: MCP + Skill
+
+```
+MCP server → conecta Claude a la base de datos
+Skill      → documenta el schema, patrones de query y qué tablas usar
+
+= Agente integrado que sabe cómo usar tu base de datos
+```
+
+:::caution
+Los servidores MCP cargan todas sus herramientas al inicio de cada sesión y consumen contexto. Desconecta los que no estés usando activamente.
+:::
+
 ## Hooks
 
-Los hooks son scripts de shell que se ejecutan automáticamente en respuesta a eventos del ciclo de vida de Claude Code:
+Los hooks son scripts de shell que se ejecutan automáticamente en respuesta a eventos del ciclo de vida de Claude Code. A diferencia de las instrucciones en `CLAUDE.md` (que son sugerencias), **los hooks garantizan que la acción ocurre**.
 
 | Evento | Descripción |
 |--------|-------------|
 | `PreToolUse` | Antes de ejecutar una herramienta |
 | `PostToolUse` | Después de ejecutar una herramienta |
+| `PostFileEdit` | Después de editar un archivo |
 | `Notification` | Cuando Claude envía una notificación |
 | `Stop` | Cuando Claude termina de responder |
 
 ```json
+// .claude/settings.json
 {
   "hooks": {
+    "PostFileEdit": ["npx eslint --fix $FILE"],
     "PostToolUse": [{
       "matcher": "Write",
       "hooks": [{ "type": "command", "command": "npm run lint -- $TOOL_OUTPUT_FILE" }]

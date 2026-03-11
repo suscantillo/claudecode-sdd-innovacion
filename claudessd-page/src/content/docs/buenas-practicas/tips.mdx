@@ -76,3 +76,33 @@ Las sesiones largas con muchos temas diferentes degradan la calidad. Es mejor:
 - Una sesión por feature o bug
 - Usar `CLAUDE.md` para contexto persistente en lugar de re-explicar en cada sesión
 - `/compact` para comprimir el historial si la sesión se extiende
+- `/clear` entre tareas no relacionadas
+
+## Usa subagents para investigación pesada
+
+Delegar la lectura de muchos archivos a un subagent preserva el contexto de tu sesión principal:
+
+```
+> Usa subagents para investigar cómo funciona nuestro sistema de autenticación
+> y si tenemos alguna utilidad OAuth que pueda reutilizar.
+```
+
+Los subagents trabajan en su propio contexto aislado y retornan un resumen — no consumen tu ventana de contexto principal.
+
+## Aprovecha los checkpoints
+
+Antes de cada edición de archivo, Claude hace un snapshot automático. Si algo sale mal, `/rewind` en lugar de hacer `git reset` manual. Los checkpoints son independientes de git y persisten entre sesiones.
+
+## Incluye casos de test en el prompt
+
+Claude funciona mejor cuando puede verificar su propio trabajo. Al incluir casos de test en el prompt, implementa y luego verifica:
+
+```
+Implementa validateEmail.
+Casos de test: 'user@example.com' → true, 'invalid' → false, 'user@.com' → false.
+Corre los tests después de implementar.
+```
+
+## Pregunta antes de que genere
+
+Empieza con "¿Qué dudas tienes sobre este spec antes de implementar?" — evitas que Claude asuma cosas que te costarán un ciclo de corrección.

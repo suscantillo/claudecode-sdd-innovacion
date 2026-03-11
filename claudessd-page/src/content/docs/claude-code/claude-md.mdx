@@ -5,50 +5,87 @@ description: Estructura, niveles y límites reales del archivo CLAUDE.md.
 
 ## ¿Qué es CLAUDE.md?
 
-`CLAUDE.md` es el archivo de instrucciones persistentes para Claude Code. Se carga automáticamente al inicio de cada sesión y define el contexto, convenciones y restricciones del proyecto.
+`CLAUDE.md` es el archivo de instrucciones persistentes para Claude Code. Se carga automáticamente al inicio de cada sesión y define el contexto, convenciones y restricciones del proyecto. Es el mecanismo principal para que Claude "recuerde" cosas entre sesiones.
 
 ## Niveles de CLAUDE.md
 
-Claude Code soporta múltiples niveles de configuración con orden de precedencia:
+Claude Code soporta múltiples niveles de configuración. Todos se cargan de forma **aditiva**: si hay conflictos, prevalecen las instrucciones más específicas.
 
 | Nivel | Ruta | Alcance |
 |-------|------|---------|
 | Global | `~/.claude/CLAUDE.md` | Todos los proyectos del usuario |
-| Proyecto raíz | `./CLAUDE.md` | Todo el repositorio |
-| Subdirectorio | `./src/CLAUDE.md` | Solo ese directorio y sus hijos |
+| Proyecto raíz | `./CLAUDE.md` | Todo el repositorio (versionado con git) |
+| Personal del proyecto | `./CLAUDE.local.md` | Proyecto, en `.gitignore` (no se versiona) |
+| Subdirectorio | `./src/module/CLAUDE.md` | Solo ese directorio y sus hijos |
 
-Los niveles más específicos **extienden** (no reemplazan) a los más generales.
+## Generar el CLAUDE.md inicial
+
+```bash
+/init   # Claude analiza el proyecto y genera un CLAUDE.md base
+```
+
+:::caution
+En un directorio vacío, `/init` puede tardar o quedarse en `percolating`. Si ocurre, cancela con `Esc` y crea el archivo manualmente.
+:::
 
 ## Estructura recomendada
 
 ```markdown
-# CLAUDE.md
+# CLAUDE.md — Proyecto: Portal TIC Interno
 
-## Comandos
-npm run dev   # iniciar servidor
-npm test      # correr tests
+## Stack
+- Framework: Next.js 14 (App Router)
+- UI: shadcn/ui + Tailwind CSS
+- Validación: Zod
 
-## Arquitectura
-Descripción de la estructura del proyecto y decisiones clave.
+## Comandos del proyecto
+- `npm run dev`   → servidor de desarrollo
+- `npm run test`  → ejecutar tests
+- `npm run lint`  → ESLint
 
 ## Convenciones
-- Nombrado de variables, archivos, etc.
-- Patrones preferidos
+- Componentes en PascalCase, archivos en kebab-case
+- TypeScript estricto, nunca `any`
+- Commits en español: feat/fix/chore
 
-## Restricciones
-- Lo que Claude NO debe hacer en este proyecto
+## Arquitectura
+- Los servicios viven en /src/services
+- Los controllers solo orquestan, no tienen lógica de negocio
+- NUNCA modificar archivos en /migrations sin aprobación explícita
+
+## Compact Instructions
+Cuando compactes, siempre preserva:
+- Lista completa de archivos modificados
+- Comandos de test usados
+- Decisiones de arquitectura tomadas en la sesión
+```
+
+## Importar archivos externos
+
+Puedes referenciar otros archivos del proyecto directamente desde `CLAUDE.md`:
+
+```markdown
+Ver @README.md para el overview del proyecto.
+Ver @package.json para los comandos disponibles.
+- Git workflow: @docs/git-workflow.md
 ```
 
 ## Límites reales
 
-- Las líneas después de la 200 en `MEMORY.md` se truncan en el contexto de auto-memoria
-- Un `CLAUDE.md` muy largo consume ventana de contexto en cada sesión
-- Se recomienda mantenerlo **conciso y accionable** — evitar documentación genérica
-- Los subdirectorios con sus propios `CLAUDE.md` permiten instrucciones específicas por área
+- Mantener bajo **500 líneas**. Si crece demasiado, mover contenido de referencia a Skills.
+- Un `CLAUDE.md` muy largo consume ventana de contexto en cada sesión.
+- Los subdirectorios con sus propios `CLAUDE.md` permiten instrucciones específicas por área.
 
-## Buenas prácticas
+## Qué incluir y qué no
 
-- Incluir comandos de build, test y lint con ejemplos reales
-- Documentar decisiones arquitectónicas que requieren leer múltiples archivos para entender
-- Especificar preferencias del equipo (no prácticas genéricas de desarrollo)
-- Referenciar archivos clave en lugar de duplicar su contenido
+**Incluir:**
+- Comandos de build, test y lint con ejemplos reales
+- Convenciones no estándar del equipo (prefijos de commits, estructura de archivos)
+- Restricciones específicas del negocio o del proyecto
+- Decisiones arquitectónicas que requieren leer múltiples archivos para entender
+
+**No incluir:**
+- Cosas que Claude puede inferir del código
+- Documentación detallada de APIs externas (mejor linkear)
+- Información que cambia frecuentemente
+- Instrucciones genéricas como "escribe código limpio" o "agrega manejo de errores"

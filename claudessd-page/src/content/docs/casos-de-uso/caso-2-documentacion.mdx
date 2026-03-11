@@ -59,9 +59,20 @@ docs/
     └── notifications.md
 ```
 
-## Por qué Plan Mode es clave aquí
+## Decisiones autónomas de Claude
 
-Sin Plan Mode, Claude podría empezar a sobreescribir documentación antes de tener el contexto completo. El plan explícito asegura que el equipo valide el enfoque antes de que se genere contenido que luego hay que descartar.
+En este experimento, Claude tomó dos decisiones relevantes por su cuenta al generar el plan:
+
+- Los routers ya tenían docstrings → los **excluyó del plan** sin que se le indicara
+- La carpeta `/docs` estaba referenciada en el `CLAUDE.md` pero vacía → decidió **no crearla** porque no había instrucción explícita del usuario
+
+Al aprobar y ejecutar, Claude salió de Plan Mode y procesó todos los archivos. Resultado: README completo creado desde cero, docstrings en todos los modelos y schemas del backend, JSDoc en interfaces, hooks y componentes del frontend. Cero archivos de código funcional modificados.
+
+## Plan Mode como herramienta de comunicación
+
+El Plan Mode no es solo un modo de seguridad — es una herramienta de comunicación. El plan generado revela cómo Claude interpreta la tarea antes de ejecutarla, lo que permite corregir el rumbo sin haber tocado nada.
+
+Sin Plan Mode, Claude podría empezar a sobrescribir documentación antes de tener el contexto completo. El plan explícito asegura que el equipo valide el enfoque antes de que se genere contenido que luego hay que descartar.
 
 ## Automatizar con hooks
 

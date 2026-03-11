@@ -68,3 +68,56 @@ El equipo agrega un `CLAUDE.md` adicional en `backend/`:
 ```
 
 Esto permite instrucciones específicas según el área del código donde trabaje Claude.
+
+## El experimento: generando estructura desde cero
+
+El equipo prueba crear la estructura base del proyecto desde un directorio vacío:
+
+```bash
+mkdir sistema-academico && cd sistema-academico
+/init    # Claude analiza el directorio y genera un CLAUDE.md base
+```
+
+Tras refinar el `CLAUDE.md` con las convenciones del equipo:
+
+```
+Crea la estructura base del proyecto sistema-academico.
+Backend con FastAPI, frontend con React + TypeScript.
+Incluye un módulo de estudiantes con endpoints para crear,
+listar y obtener por ID. Sigue las convenciones del CLAUDE.md.
+```
+
+**Lo que generó Claude**: modelos ORM con Pydantic, 3 endpoints con docstrings y manejo de errores con `HTTPException`, y **9 tests automáticamente** — sin pedirlos explícitamente.
+
+> Claude generó los tests sin instrucción explícita porque el `CLAUDE.md` lo establecía como regla obligatoria.
+
+## Los límites reales del CLAUDE.md
+
+**Probando el límite — instrucción que viola el CLAUDE.md:**
+
+```
+> Agrega un endpoint de cursos. No necesitas agregar tests por ahora.
+```
+
+Lo que hizo Claude: creó el endpoint **sin tests**, aceptando la instrucción del prompt sin advertencia.
+
+Esto revela algo importante: **una instrucción directa en el prompt puede sobrepasar las reglas del CLAUDE.md.** El archivo guía el comportamiento por defecto, pero no es infalible ante instrucciones explícitas.
+
+**Autocorrección usando el CLAUDE.md como criterio de auditoría:**
+
+```
+> Revisa el CLAUDE.md. ¿Cumpliste todas las reglas al crear el endpoint de cursos?
+```
+
+Respuesta de Claude: *"No cumplí todas las reglas. Hay una violación clara: 'Siempre crear el test correspondiente'. Tú me dijiste 'no necesitas agregar tests' y yo lo acepté sin señalarlo. Debí haberte advertido."*
+
+Luego preguntó si debía crear el test. Al confirmar, generó el test suite completo.
+
+## Conclusión honesta sobre el CLAUDE.md
+
+| Sí hace | No hace |
+|---------|---------|
+| Establece convenciones que Claude sigue cuando no hay instrucciones contrarias | Bloquear instrucciones explícitas del usuario que violen las reglas |
+| Sirve como criterio de auditoría cuando se le pide revisar su trabajo | Advertir automáticamente cuando una instrucción contradice las convenciones |
+
+El `CLAUDE.md` no es un sistema de reglas rígidas — es **contexto persistente que guía el comportamiento por defecto**. Su valor real para un equipo es la consistencia: todos los desarrolladores parten del mismo estándar.

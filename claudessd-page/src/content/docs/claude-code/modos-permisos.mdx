@@ -7,6 +7,12 @@ description: Plan Mode, checkpoints y modos de operación de Claude Code.
 
 Claude Code puede operar en diferentes modos según el nivel de autonomía requerido:
 
+| Modo | Comportamiento |
+|------|---------------|
+| **Por defecto** | Claude pide permiso antes de editar archivos y correr comandos |
+| **Auto-accept edits** | Edita archivos sin preguntar, sigue pidiendo permiso para comandos |
+| **Plan Mode** | Solo lectura — genera un plan que el usuario aprueba antes de ejecutar |
+
 ### Modo interactivo (por defecto)
 
 Claude solicita confirmación antes de ejecutar acciones con impacto significativo (borrar archivos, push a repositorios, etc.).
@@ -23,7 +29,7 @@ Usar solo en entornos controlados como pipelines CI/CD. Claude ejecutará todas 
 
 ### Plan Mode
 
-El modo de planificación permite que Claude diseñe una estrategia antes de ejecutar cambios. Se activa con `/plan` o usando la herramienta `EnterPlanMode`.
+El modo de planificación permite que Claude diseñe una estrategia antes de ejecutar cambios. Es especialmente útil para tareas complejas o código que no se conoce bien.
 
 **Cuándo usar Plan Mode:**
 - Tareas que afectan múltiples archivos
@@ -31,7 +37,28 @@ El modo de planificación permite que Claude diseñe una estrategia antes de eje
 - Cuando hay múltiples enfoques válidos
 - Antes de refactorizaciones grandes
 
-En Plan Mode, Claude explora el código, diseña el plan y espera aprobación explícita antes de implementar.
+```bash
+claude --permission-mode plan   # Iniciar directamente en Plan Mode
+```
+
+O desde dentro de una sesión activa:
+
+```bash
+/plan
+```
+
+Dentro de Plan Mode, usa `Ctrl+G` para abrir el plan en el editor de texto y editarlo antes de que Claude proceda.
+
+**Configurar Plan Mode como comportamiento por defecto:**
+
+```json
+// .claude/settings.json
+{
+  "permissions": {
+    "defaultMode": "plan"
+  }
+}
+```
 
 ## Permisos por herramienta
 
@@ -47,25 +74,27 @@ El usuario puede aprobar o denegar herramientas individualmente. Las herramienta
 
 ## Checkpoints
 
-Claude Code puede crear puntos de restauración antes de operaciones destructivas. Los checkpoints permiten revertir cambios si el resultado no es el esperado.
+Antes de cada edición de archivo, Claude hace un snapshot automático. Los checkpoints son **locales a la sesión, independientes de git, y persisten entre sesiones**.
 
 ```bash
-# Ver historial de checkpoints en una sesión
-/checkpoints
-
-# Restaurar un checkpoint
-/restore <checkpoint-id>
+Esc × 2  o  /rewind   # Abrir el menú de checkpoints
+/checkpoints           # Ver historial de checkpoints
 ```
+
+Desde el menú de checkpoints puedes restaurar archivos, la conversación, o ambos.
 
 ## Hooks de permisos
 
 Los hooks son comandos de shell que se ejecutan en respuesta a eventos de Claude Code, permitiendo control programático de los permisos:
 
 ```json
-// settings.json
+// .claude/settings.json
 {
   "hooks": {
+    "PostFileEdit": ["npx eslint --fix $FILE"],
     "PreToolUse": [{ "matcher": "Bash", "hooks": [{ "type": "command", "command": "echo 'Bash ejecutándose'" }] }]
   }
 }
 ```
+
+Eventos disponibles: `PostFileEdit`, `PreToolUse`, `PostToolUse`, `Notification`, `WorktreeCreate`, `WorktreeRemove`.
